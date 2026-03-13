@@ -1,0 +1,8 @@
+# CodeAlpha NIDS - Python Dependencies
+# Install with: pip install -r requirements.txt
+
+flask>=3.0.0
+scapy>=2.5.0
+
+# Optional: for enhanced packet analysis
+# pyshark>=0.6.0
