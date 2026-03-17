@@ -1,128 +1,157 @@
-# 🛡️ CodeAlpha NIDS — Network Intrusion Detection System
+# 🛡️ CodeAlpha — Network Intrusion Detection System (NIDS)
 
-> **CodeAlpha Cybersecurity Internship — Task 4**  
-> A Python-based Network Intrusion Detection System with real-time web dashboard.
+<div align="center">
+
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-3.0-black?style=for-the-badge&logo=flask&logoColor=white)
+![Scapy](https://img.shields.io/badge/Scapy-2.5-orange?style=for-the-badge)
+![License](https://img.shields.io/badge/License-Educational-green?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge)
+
+**A real-time Network Intrusion Detection System with a live web dashboard — built as part of the CodeAlpha Cybersecurity Internship.**
+
+</div>
 
 ---
 
-## 📸 Features
+## 📌 Overview
 
-- **Live Packet Capture** — Captures and analyzes network traffic using Scapy
-- **10 Detection Rules** — SYN Flood, Port Scan, ICMP Flood, DNS Tunneling, ARP Spoofing, NULL/XMAS Scans, and more
-- **Real-Time Dashboard** — Live web UI with charts, alert feed, and traffic analytics
-- **Simulation Mode** — Runs without root/admin privileges for demo purposes
-- **Zero External Dashboard Dependencies** — Pure HTML/JS frontend served by Flask
+This project is a Python-based **Network Intrusion Detection System (NIDS)** that monitors network traffic, detects malicious activity using custom rule-based detection, and visualizes everything through a sleek real-time web dashboard.
+
+It covers the full pipeline — from raw packet capture all the way to alerting and visualization — making it a complete end-to-end security monitoring solution.
+
+---
+
+## 🎯 Features
+
+- 🔴 **Real-Time Packet Capture** — Sniffs live network traffic using Scapy
+- ⚡ **10 Detection Rules** — Covers a wide range of network attacks
+- 📊 **Live Web Dashboard** — Beautiful dark-themed UI with auto-updating charts
+- 🚨 **Instant Alerts** — Severity-based alerting (HIGH / MEDIUM / LOW)
+- 🖥️ **Simulation Mode** — Run and demo without root privileges
+- 🌐 **REST API** — JSON endpoints for integration with other tools
 
 ---
 
 ## 🔍 Detection Capabilities
 
-| Attack Type | Severity | Protocol | Detection Method |
-|------------|----------|----------|-----------------|
-| SYN Flood | 🔴 HIGH | TCP | >100 SYN packets from same IP in 5s |
-| Port Scan | 🟠 MEDIUM | TCP | >15 distinct ports probed in 5s |
-| ICMP Flood / Ping of Death | 🔴 HIGH | ICMP | >50 pings/5s or oversized ICMP |
-| DNS Tunneling | 🔴 HIGH | DNS/UDP | Query length >100 chars |
-| DNS Exfiltration | 🔴 HIGH | DNS/UDP | Abnormal label lengths |
-| ARP Spoofing | 🔴 HIGH | ARP | MAC address change for known IP |
-| NULL Scan | 🟠 MEDIUM | TCP | TCP packet with no flags set |
-| XMAS Scan | 🟠 MEDIUM | TCP | FIN+PSH+URG flags set |
-| Suspicious Port Access | 🟠 MEDIUM | TCP/UDP | Known exploit ports (4444, 31337, etc.) |
-| Oversized Packet | 🟡 LOW | TCP | Packet >9000 bytes |
+| # | Attack Type | Severity | Protocol | How It's Detected |
+|---|------------|----------|----------|--------------------|
+| 1 | **SYN Flood** | 🔴 HIGH | TCP | >100 SYN packets from same IP in 5s |
+| 2 | **Port Scan** | 🟠 MEDIUM | TCP | >15 distinct ports probed in 5s |
+| 3 | **ICMP Flood** | 🔴 HIGH | ICMP | >50 ICMP packets in 5s window |
+| 4 | **Ping of Death** | 🔴 HIGH | ICMP | ICMP packet size >65,500 bytes |
+| 5 | **DNS Tunneling** | 🔴 HIGH | DNS | Query length exceeds 100 characters |
+| 6 | **DNS Exfiltration** | 🔴 HIGH | DNS | Abnormally long DNS label detected |
+| 7 | **ARP Spoofing** | 🔴 HIGH | ARP | MAC address change for a known IP |
+| 8 | **NULL Scan** | 🟠 MEDIUM | TCP | TCP packet with zero flags set |
+| 9 | **XMAS Scan** | 🟠 MEDIUM | TCP | FIN + PSH + URG flags set simultaneously |
+| 10 | **Suspicious Port Access** | 🟠 MEDIUM | TCP/UDP | Known exploit ports targeted (4444, 31337, etc.) |
 
 ---
 
-## 🚀 Quick Start
+## 📊 Dashboard Preview
+
+The live dashboard includes:
+
+| Widget | Description |
+|--------|-------------|
+| 📈 **Traffic Timeline** | Live packets/sec graph for TCP, UDP, ICMP |
+| 🥧 **Protocol Breakdown** | Donut chart showing traffic composition |
+| 🚨 **Alert Feed** | Real-time table of all detected intrusions |
+| ⚡ **Alert Types** | Distribution of threat categories |
+| 🔴 **Top Source IPs** | Most active / suspicious source addresses |
+| 🎯 **Top Destinations** | Most targeted hosts on the network |
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
+- Python 3.8 or higher
+- pip
+
+### Installation
+
 ```bash
+# 1. Clone the repository
+git clone https://github.com/ishaluuu/CodeAlpha_NetworkIntrusionDetection.git
+
+# 2. Navigate into the folder
+cd CodeAlpha_NetworkIntrusionDetection
+
+# 3. Install dependencies
 pip install -r requirements.txt
 ```
 
-### Option 1: Simulation Mode (No root required)
+### Running the Dashboard
+
+**Option 1 — Simulation Mode** *(No root required — perfect for demo)*
 ```bash
 python dashboard.py --simulate
 ```
 
-### Option 2: Live Capture (Requires root/admin)
+**Option 2 — Live Capture** *(Requires root/Administrator)*
 ```bash
-# Linux/Mac
+# Linux / macOS
 sudo python dashboard.py
 
-# Specify interface
+# Specify a network interface
 sudo python dashboard.py --interface eth0
 
-# Windows (run as Administrator)
+# Windows (run Command Prompt as Administrator)
 python dashboard.py
 ```
 
-Then open your browser at: **http://localhost:5000**
-
----
-
-## 📊 Dashboard Overview
-
-The web dashboard provides:
-
-- **Live Traffic Timeline** — Packets/sec graph for TCP, UDP, ICMP
-- **Protocol Breakdown** — Donut chart of traffic composition  
-- **Alert Feed** — Real-time table of detected intrusions with severity badges
-- **Alert Type Distribution** — Bar chart of threat categories
-- **Top Source IPs** — Most active (potentially malicious) sources
-- **Top Destination IPs** — Most targeted hosts
+Then open your browser and go to:
+```
+http://localhost:5000
+```
 
 ---
 
 ## ⚙️ Configuration
 
-Edit thresholds in `nids_engine.py`:
+You can adjust detection thresholds in `nids_engine.py`:
 
 ```python
 class DetectionEngine:
-    SYN_FLOOD_THRESHOLD    = 100   # SYN packets per 5s
-    PORT_SCAN_THRESHOLD    = 15    # distinct ports per 5s  
-    ICMP_FLOOD_THRESHOLD   = 50    # ICMP packets per 5s
-    LARGE_PAYLOAD_BYTES    = 9000  # oversized packet threshold
-```
-
-### Suspicious Ports
-
-The following ports trigger medium-severity alerts when targeted:
-
-```
-22    SSH          3389  RDP          4444  Metasploit
-23    Telnet       5555  Android ADB  6667  IRC
-31337 Back Orifice 12345 NetBus       1337  Exploit port
+    SYN_FLOOD_THRESHOLD    = 100   # SYN packets per 5s window
+    PORT_SCAN_THRESHOLD    = 15    # Distinct ports per 5s window
+    ICMP_FLOOD_THRESHOLD   = 50    # ICMP packets per 5s window
+    LARGE_PAYLOAD_BYTES    = 9000  # Oversized packet threshold
 ```
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Project Structure
 
 ```
-nids/
-├── nids_engine.py    # Core detection engine (Scapy + rules)
-├── dashboard.py      # Flask server + HTML dashboard
-├── requirements.txt  # Python dependencies
-└── README.md
+CodeAlpha_NetworkIntrusionDetection/
+│
+├── nids_engine.py      # Core detection engine (packet capture + rules)
+├── dashboard.py        # Flask web server + real-time dashboard UI
+├── requirements.txt    # Python dependencies
+└── README.md           # Project documentation
 ```
 
-**Data flow:**
+### How It Works
+
 ```
-Network Interface
+Network Traffic
       ↓
-  Scapy sniffer (nids_engine.py)
+ Scapy Packet Sniffer
       ↓
-  process_packet()
+ process_packet()
       ↓
-  DetectionEngine rules
+ Detection Rules Engine
       ↓
-  NIDSState (thread-safe store)
+ Shared State (thread-safe)
       ↓
-  Flask API (/api/snapshot)
+ Flask REST API
       ↓
-  Browser Dashboard (polling every 1.5s)
+ Live Browser Dashboard
 ```
 
 ---
@@ -130,36 +159,48 @@ Network Interface
 ## 🛠️ CLI Options
 
 ```
-usage: dashboard.py [-h] [--interface INTERFACE] [--simulate] [--port PORT] [--host HOST]
+python dashboard.py [OPTIONS]
 
-options:
-  -h, --help            show this help message and exit
-  --interface, -i       Network interface (e.g. eth0, wlan0)
-  --simulate, -s        Simulation mode — no root required
-  --port, -p            Dashboard port (default: 5000)
-  --host                Dashboard host (default: 0.0.0.0)
+Options:
+  --interface, -i    Network interface to sniff (e.g. eth0, wlan0)
+  --simulate,  -s    Run in simulation mode (no root needed)
+  --port,      -p    Dashboard port (default: 5000)
+  --host             Dashboard host (default: 0.0.0.0)
 ```
+
+---
+
+## 🧰 Tech Stack
+
+| Tool | Purpose |
+|------|---------|
+| **Python** | Core language |
+| **Scapy** | Packet capture & analysis |
+| **Flask** | Web server & REST API |
+| **Chart.js** | Live dashboard charts |
+| **HTML/CSS/JS** | Frontend dashboard UI |
 
 ---
 
 ## ⚠️ Legal Disclaimer
 
-> This tool is developed **for educational purposes only** as part of the CodeAlpha Cybersecurity Internship.  
-> Only use on networks you **own or have explicit permission** to monitor.  
-> Unauthorized network monitoring may violate local laws.
+> This tool was developed **strictly for educational purposes** as part of the CodeAlpha Cybersecurity Internship Program.
+> Only deploy and use this tool on networks that **you own or have explicit written permission** to monitor.
+> Unauthorized interception of network traffic may violate local, state, and federal laws.
 
 ---
 
 ## 👤 Author
 
-**CodeAlpha Cybersecurity Internship**  
-Task 4 — Network Intrusion Detection System  
+**Risaal** — CodeAlpha Cybersecurity Internship  
+🔗 [GitHub](https://github.com/ishaluuu) 
+🔗 [LinkedIn](https://www.linkedin.com/in/risaal-riyas-4967b8382/)
 
 ---
 
-## 📚 References
+## 🙏 Acknowledgements
 
+- [CodeAlpha](https://codealpha.tech) — for providing this internship opportunity
 - [Scapy Documentation](https://scapy.readthedocs.io/)
-- [Snort Rule Writing Guide](https://docs.snort.org/)
-- [MITRE ATT&CK — Network Sniffing](https://attack.mitre.org/techniques/T1040/)
-- [OWASP Network Intrusion Detection](https://owasp.org/)
+- [MITRE ATT&CK Framework](https://attack.mitre.org/)
+- [OWASP](https://owasp.org/)
